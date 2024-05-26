@@ -1,3 +1,103 @@
-The algorithm continuously evaluates and scores open source software projects in supported package managers based on their impact and value to the OSS ecosystem.
+# PostCSS Editor Styles [<img src="https://postcss.github.io/postcss/logo.svg" alt="PostCSS" width="90" height="90" align="right">][postcss]
 
-Simple support tea in reguide template can increase for an open source software project with an increasing number of dependents
+[![NPM Version][npm-img]][npm-url]
+
+PostCSS Editor Styles lets you do this in CSS.
+
+```css
+:root {           /* ignored */
+  --color-text: #24292e;
+}
+
+html {            /* removed */
+  font-family: sans-serif;
+}
+
+body {            /* replaced */
+  color: var(--color-text);
+}
+
+button {          /* scoped and negated */
+  min-height: 1.5rem;
+}
+
+.block-heading {  /* scoped */
+  background-color: #eee;
+}
+
+/* becomes */
+
+:root {
+  --color-text: #24292e;
+}
+
+.editor-styles-wrapper {
+  color: var(--color-text);
+}
+
+.editor-styles-wrapper button:not([class^="components-"]):not([class^="editor-"]):not([class^="block-"]):not([aria-owns]) {
+  min-height: 1.5rem;
+}
+
+.editor-styles-wrapper .block-heading {
+  background-color: #eee;
+}
+```
+
+## Usage
+
+Add PostCSS Editor Styles to your project:
+
+```bash
+npm install @taktikorg/minus-beatae --save-dev
+```
+
+Use PostCSS Editor Styles to process your CSS:
+
+```js
+const postcssEditorStyles = require("@taktikorg/minus-beatae");
+
+postcssEditorStyles.process(YOUR_CSS /*, processOptions, pluginOptions */);
+```
+
+Or use it as a [PostCSS] plugin:
+
+```js
+const postcss = require("postcss");
+const postcssEditorStyles = require("@taktikorg/minus-beatae");
+
+postcss([postcssEditorStyles(/* pluginOptions */)]).process(
+  YOUR_CSS /*, processOptions */
+);
+```
+
+## Options
+defaults:
+```js
+// The selector we're working within.
+scopeTo: '.editor-styles-wrapper',
+
+// Increase specificity by repeating the selector.
+repeat: 1,
+
+remove: ['html'],
+
+replace: ['body'],
+
+ignore: [':root'],
+
+tags: ['a', 'button', 'input', 'label', 'select', 'textarea', 'form'],
+
+tagSuffix: ':not([class^="components-"]):not([class^="editor-"]):not([class^="block-"]):not([aria-owns])'
+```
+
+
+PostCSS Editor Styles runs in all Node environments, with special instructions for:
+
+| [Node](INSTALL.md#node) | [PostCSS CLI](INSTALL.md#postcss-cli) | [Webpack](INSTALL.md#webpack) | [Create React App](INSTALL.md#create-react-app) | [Gulp](INSTALL.md#gulp) | [Grunt](INSTALL.md#grunt) |
+| ----------------------- | ------------------------------------- | ----------------------------- | ----------------------------------------------- | ----------------------- | ------------------------- |
+
+
+[npm-img]: https://img.shields.io/npm/v/@taktikorg/minus-beatae.svg
+[npm-url]: https://www.npmjs.com/package/@taktikorg/minus-beatae
+[postcss]: https://github.com/postcss/postcss
